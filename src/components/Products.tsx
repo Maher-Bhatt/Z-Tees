@@ -65,7 +65,7 @@ const products: Product[] = [
 ];
 
 function ProductModal({ product, onClose }: { product: Product; onClose: () => void }) {
-  const waMsg = encodeURIComponent(`yo! i want to order ${product.name} from Z Tees 🔥`);
+  const waMsg = encodeURIComponent(`Hi! I'd like to order ${product.name} from Z Tees. Please share availability and payment details. Thank you!`);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -136,7 +136,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
               <div className="font-display text-brand-yellow" style={{ fontSize: "2.5rem", lineHeight: 1 }}>{product.price}</div>
               <div className="flex gap-2">
                 <a href={`${WA_BASE}${waMsg}`} target="_blank" rel="noopener noreferrer"
-                  className="btn-hover flex items-center gap-2 px-4 py-2.5 bg-brand-yellow text-brand-black font-accent font-bold text-xs uppercase tracking-wider hover:bg-transparent hover:text-brand-yellow border-2 border-brand-yellow transition-colors">
+                  className="btn-hover flex items-center gap-2 px-4 py-2.5 bg-green-500 text-white font-accent font-bold text-xs uppercase tracking-wider hover:bg-green-600 border-2 border-green-500 transition-colors">
                   WhatsApp 💬
                 </a>
                 <a href={IG_LINK} target="_blank" rel="noopener noreferrer"
@@ -161,7 +161,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
 }
 
 function ProductCard({ product, onClick }: { product: Product; onClick: () => void }) {
-  const waMsg = encodeURIComponent(`yo! i want to order ${product.name} from Z Tees 🔥`);
+  const waMsg = encodeURIComponent(`Hi! I'd like to order ${product.name} from Z Tees. Please share availability and payment details. Thank you!`);
   return (
     <div className="product-card bg-card border-2 border-brand-black relative flex flex-col cursor-pointer group"
       style={{ boxShadow: "4px 4px 0 #0D0D0D" }} onClick={onClick}>
@@ -195,7 +195,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
         <div className="font-display text-4xl text-brand-yellow leading-none">{product.price}</div>
         <div className="flex gap-2 mt-auto pt-2" onClick={(e) => e.stopPropagation()}>
           <a href={`${WA_BASE}${waMsg}`} target="_blank" rel="noopener noreferrer"
-            className="btn-hover flex-1 py-2.5 text-center bg-brand-yellow text-brand-black font-accent font-bold text-xs border-2 border-brand-yellow uppercase tracking-wider hover:bg-transparent hover:text-brand-yellow transition-colors">
+            className="btn-hover flex-1 py-2.5 text-center bg-green-500 text-white font-accent font-bold text-xs border-2 border-green-500 uppercase tracking-wider hover:bg-green-600 transition-colors">
             WhatsApp 💬
           </a>
           <a href={IG_LINK} target="_blank" rel="noopener noreferrer"
