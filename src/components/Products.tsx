@@ -10,7 +10,7 @@ import gothamNights from "@/assets/gotham-nights.jpeg";
 import painTee from "@/assets/pain-tee.jpeg";
 import gojoTee from "@/assets/gojo-tee.jpeg";
 
-const WA_BASE = "https://wa.me/917861090570?text=";
+const WA_BASE = "https://wa.me/917990407096?text=";
 const IG_LINK = "https://instagram.com/z_tees.in";
 const ALL_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 

@@ -32,7 +32,7 @@ export default function FloatingButtons() {
 
       {/* WhatsApp button with expand */}
       <a
-        href="https://wa.me/917861090570?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
+        href="https://wa.me/917990407096?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
         target="_blank"
         rel="noopener noreferrer"
         className="animate-ping-slow flex items-center gap-2 bg-green-500 text-white rounded-full shadow-lg overflow-hidden transition-all duration-300"

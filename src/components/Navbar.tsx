@@ -125,7 +125,7 @@ export default function Navbar() {
         </div>
         <div className="mt-auto px-6 pb-10">
           <a
-            href="https://wa.me/917861090570?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
+            href="https://wa.me/917990407096?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full py-4 text-center font-display text-3xl bg-green-500 text-white rounded-sm btn-hover"
