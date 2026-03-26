@@ -6,11 +6,7 @@ export default function OrderCTA() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      },
+      (entries) => { entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add("visible"); }); },
       { threshold: 0.1 }
     );
     const reveals = sectionRef.current?.querySelectorAll(".reveal");
@@ -24,7 +20,6 @@ export default function OrderCTA() {
       className="py-24 px-4 sm:px-6 relative overflow-hidden"
       style={{ backgroundColor: "#FFE600" }}
     >
-      {/* Decorative noise */}
       <div
         className="absolute inset-0 pointer-events-none opacity-5"
         style={{
@@ -38,29 +33,28 @@ export default function OrderCTA() {
           className="reveal font-display text-brand-black"
           style={{ fontSize: "clamp(4rem, 16vw, 13rem)", lineHeight: 0.88 }}
         >
-          STOP SCROLLING.
+          READY TO ORDER?
         </h2>
         <h2
           className="reveal reveal-delay-1 font-display text-brand-black"
           style={{ fontSize: "clamp(3rem, 12vw, 10rem)", lineHeight: 0.9 }}
         >
-          ORDER YOUR TEE.
+          LET'S TALK.
         </h2>
 
         <p className="reveal reveal-delay-2 font-body text-brand-black/70 mt-6 text-base max-w-md mx-auto">
-          you've been looking at this page long enough.
-          you know you want it. just order.
+          Browse the collection, find your fit, and place your order directly via WhatsApp or Instagram.
         </p>
 
         <div className="reveal reveal-delay-3 mt-10 flex flex-wrap gap-4 justify-center">
           <a
-            href="https://wa.me/917990407096?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
+            href="https://wa.me/917990407096?text=Hi!%20I%20would%20like%20to%20place%20an%20order%20from%20Z%20Tees."
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-hover flex items-center gap-2 px-10 py-5 bg-green-500 text-white font-display text-2xl tracking-widest border-3 border-green-600"
+            className="btn-hover flex items-center gap-2 px-10 py-5 bg-green-500 text-white font-display text-2xl tracking-widest"
             style={{ border: "3px solid #16a34a" }}
           >
-            WHATSAPP 💬
+            WhatsApp
           </a>
           <a
             href="https://instagram.com/z_tees.in"
@@ -70,12 +64,12 @@ export default function OrderCTA() {
             style={{ border: "3px solid #0D0D0D" }}
           >
             <Instagram size={24} />
-            INSTAGRAM 📲
+            Instagram
           </a>
         </div>
 
         <p className="reveal reveal-delay-4 mt-8 font-accent text-brand-black/50 text-xs">
-          COD available. UPI preferred. DM to know more.
+          Cash on delivery available on request. UPI preferred. Contact us for details.
         </p>
       </div>
     </section>

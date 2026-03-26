@@ -31,7 +31,7 @@ export default function SizeChart() {
             FIND YOUR FIT 📐
           </h2>
           <p className="reveal reveal-delay-1 font-accent text-brand-black/70 mt-3 text-sm font-medium uppercase tracking-widest">
-            measure once, flex forever. don't guess.
+            Measure carefully before ordering to ensure the right fit.
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function SizeChart() {
         <div className="reveal reveal-delay-3 mt-6 flex flex-col gap-2">
           <p className="font-body text-brand-black/60 text-sm italic">📏 All measurements are in inches</p>
           <p className="font-body text-brand-black/60 text-sm italic">⚠️ ±1 inch variation is normal in manufacturing</p>
-          <p className="font-body text-brand-black/80 text-sm font-semibold mt-1">💡 We do oversized fits — if between sizes, size down.</p>
+          <p className="font-body text-brand-black/80 text-sm font-semibold mt-1">Note: Our tees run slightly oversized. If between sizes, we recommend sizing down.</p>
         </div>
       </div>
     </section>

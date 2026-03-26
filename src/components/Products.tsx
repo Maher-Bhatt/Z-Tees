@@ -22,46 +22,46 @@ export type Product = {
 
 const products: Product[] = [
   { id: 1, name: "SHINCHAN VIBES", color: "Navy Blue",
-    desc: "shinchan energy. headphones on. world off. hits different.",
-    fullDesc: "Shinchan doing what we all wish we could — headphones on, zero care given. Bold character print on premium navy cotton. The kind of tee that starts conversations.",
-    price: "₹419", badge: "HOT 🔥", badgeColor: "#FF6B00", image: shinchanVibes,
+    desc: "Bold character print on premium navy cotton. A conversation starter.",
+    fullDesc: "A bold Shinchan character print on premium navy blue cotton. Clean graphic placement with the words Choose Peace, Love Yourself, Be Happy. A relaxed, everyday tee with personality.",
+    price: "₹419", badge: "Popular", badgeColor: "#FF6B00", image: shinchanVibes,
     fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "Choose Peace · Love Yourself · Be Happy" },
   { id: 2, name: "PEACE OUT", color: "Black",
-    desc: "peace graphic on the back. white dove. red rose. pure attitude.",
-    fullDesc: "Back-print graphic with a white dove, red roses and bold PEACE typography. Clean front, statement back. The tee for people who let their back do the talking.",
-    price: "₹419", badge: "BESTSELLER ✦", badgeColor: "#FFE600", badgeTextColor: "#0D0D0D",
+    desc: "Back-print graphic featuring a white dove, red rose, and bold Peace typography.",
+    fullDesc: "A back-print design featuring a white dove in flight, a red rose, and bold PEACE typography. Clean on the front, expressive on the back. Printed on premium black cotton.",
+    price: "₹419", badge: "Best Seller", badgeColor: "#FFE600", badgeTextColor: "#0D0D0D",
     image: peaceOut, fabric: "100% Premium Cotton", fit: "Oversized Fit", highlight: "Enjoy The Wind · Effort Always Pays Off" },
   { id: 3, name: "STRANGER THINGS", color: "Chocolate Brown",
-    desc: "stranger things squad. all 8 characters. chocolate brown. iconic.",
-    fullDesc: "All 8 Stranger Things characters lined up in their iconic looks — printed on rich chocolate brown cotton. For the fans who grew up with Hawkins. Minimalist graphic, maximum nostalgia.",
-    price: "₹439", badge: "FAN FAV 🔦", badgeColor: "#CCFF00", badgeTextColor: "#0D0D0D",
+    desc: "All eight Stranger Things characters, illustrated in a single line across rich chocolate brown cotton.",
+    fullDesc: "All eight Stranger Things characters illustrated side by side in their signature looks. A clean, minimalist graphic printed on rich chocolate brown cotton. For fans who appreciate subtle references.",
+    price: "₹439", badge: "Fan Favourite", badgeColor: "#CCFF00", badgeTextColor: "#0D0D0D",
     image: gangWalk, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "Friends Don't Lie." },
   { id: 4, name: "KING IN THE NORTH", color: "Cream / Off-White",
-    desc: "king in the north. you know the reference. enough said.",
-    fullDesc: "Large front graphic of a warrior bowing with sword, bold 'KING IN THE NORTH' typography. For the ones who know the reference — and live by it.",
-    price: "₹399", badge: "FAN FAV ⚔️", badgeColor: "#FF2D78",
+    desc: "Front graphic print with bold King in the North typography on cream cotton.",
+    fullDesc: "A detailed front graphic of a warrior holding a sword, paired with bold King in the North typography. Printed on cream off-white cotton. A clean, statement piece for fans of the series.",
+    price: "₹399", badge: "Fan Favourite", badgeColor: "#FF2D78",
     image: kingNorth, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "The North Remembers." },
   { id: 5, name: "WOW CATS", color: "Dusty Pink",
-    desc: "three cats stacked. chaotic energy. 'wow!! hi' — same.",
-    fullDesc: "Three stacked cartoon cats with pure chaos energy — WOW!! and Hi printed right there. Side-placement print on soft dusty pink cotton. Cute? Yes. Core? Absolutely.",
-    price: "₹419", badge: "TOO CUTE 🐱", badgeColor: "#FF2D78",
-    image: wowCats, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "WOW!! Hi — daily mood." },
+    desc: "Stacked cartoon cat illustration with a side placement print on soft dusty pink cotton.",
+    fullDesc: "Three stacked cartoon cats printed on the side of a dusty pink tee, with WOW!! and Hi typography integrated into the design. A fun, expressive piece on soft premium cotton.",
+    price: "₹419", badge: "Customer Favourite", badgeColor: "#FF2D78",
+    image: wowCats, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "A fun, expressive design for everyday wear." },
   { id: 6, name: "GOTHAM NIGHTS", color: "Black",
-    desc: "batman logo. gotham skyline inside. dark. clean. W.",
-    fullDesc: "The bat symbol with Gotham's skyline etched inside. No loud colors, no noise. Just the logo, the city, and the vibe. Limited edition — once it's gone, it's gone.",
-    price: "₹409", badge: "LIMITED EDITION 🦇", badgeColor: "#0D0D0D",
+    desc: "The Batman symbol with Gothams skyline detailed inside. Limited edition release.",
+    fullDesc: "The iconic bat symbol with Gotham's city skyline etched inside. Printed on premium black cotton. A clean, refined graphic with no excess. This is a limited edition release and will not be restocked.",
+    price: "₹409", badge: "Limited Edition", badgeColor: "#0D0D0D",
     badgeTextColor: "#FFE600", badgeBorder: "#FFE600",
-    image: gothamNights, fabric: "100% Premium Cotton", fit: "Oversized Fit", highlight: "Limited Edition. Won't restock." },
+    image: gothamNights, fabric: "100% Premium Cotton", fit: "Oversized Fit", highlight: "Limited edition. Will not be restocked once sold out." },
   { id: 7, name: "KNOW PAIN", color: "White",
-    desc: "manga panel. japanese kanji. 'this world shall know pain.' W.",
-    fullDesc: "Manga-style panel print with Japanese kanji, dramatic composition and 'THIS WORLD SHALL KNOW PAIN' text. A tribute to one of anime's most iconic arcs. Pure street cred on white cotton.",
-    price: "₹409", badge: "ANIME CORE 👁️", badgeColor: "#8B00FF",
-    image: painTee, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "This World Shall Know Pain." },
+    desc: "Manga-style panel print with Japanese kanji and bold editorial typography on white cotton.",
+    fullDesc: "A manga-style graphic panel featuring Japanese kanji and the phrase This World Shall Know Pain. A detailed, dramatic print on premium white cotton. A tribute to one of anime's most iconic story arcs.",
+    price: "₹409", badge: "Anime Collection", badgeColor: "#8B00FF",
+    image: painTee, fabric: "100% Premium Cotton", fit: "Regular Fit", highlight: "A tribute to one of anime's most defining story arcs." },
   { id: 8, name: "GOJO SATORU", color: "Black",
-    desc: "gojo back print. reverse curse technique. strongest. period.",
-    fullDesc: "Back-print Gojo Satoru graphic in bold anime art style. Red slash accents, kanji typography, 'REVERSE CURSE TECHNIQUE' text. The strongest sorcerer on your back.",
-    price: "₹409", badge: "BACK PRINT 🌀", badgeColor: "#FF2D78",
-    image: gojoTee, fabric: "100% Premium Cotton", fit: "Oversized Fit", highlight: "Throughout Heaven & Earth, I Alone Am The Honoured One." },
+    desc: "Back-print Gojo Satoru graphic in bold anime art style. Reverse Curse Technique typography.",
+    fullDesc: "A bold back-print graphic of Gojo Satoru from Jujutsu Kaisen, featuring red slash accents and Reverse Curse Technique typography in kanji. A striking anime-inspired design on premium black cotton.",
+    price: "₹409", badge: "Back Print", badgeColor: "#FF2D78",
+    image: gojoTee, fabric: "100% Premium Cotton", fit: "Oversized Fit", highlight: "An iconic quote from Jujutsu Kaisen." },
 ];
 
 function ProductModal({ product, onClose }: { product: Product; onClose: () => void }) {
@@ -115,7 +115,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
               </div>
             </div>
             <div>
-              <p className="font-accent text-xs text-muted-foreground uppercase tracking-widest mb-2">All Sizes Available</p>
+              <p className="font-accent text-xs text-muted-foreground uppercase tracking-widest mb-2">Available Sizes</p>
               <div className="flex flex-wrap gap-2">
                 {ALL_SIZES.map((s) => (
                   <span key={s} className="font-accent text-xs font-bold px-3 py-1.5 border-2 border-brand-yellow text-brand-yellow">{s}</span>
@@ -125,7 +125,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
             <div className="bg-secondary border border-white/10 p-3 flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <Truck size={14} className="text-brand-yellow flex-shrink-0" />
-                <p className="font-accent text-xs font-bold text-brand-yellow">🎉 Gujarat — FREE Delivery</p>
+                <p className="font-accent text-xs font-bold text-brand-yellow">🎉 Free Delivery in Gujarat</p>
               </div>
               <div className="flex items-center gap-2">
                 <Package size={14} className="text-muted-foreground flex-shrink-0" />
@@ -147,7 +147,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
               </div>
             </div>
             <div className="flex items-center gap-3 flex-wrap">
-              {["Premium Quality", "Pay via UPI", "Real Photos", "No Catfish"].map((t) => (
+              {["Premium Quality", "Secure UPI Payment", "Accurate Product Images", "Fast Dispatch"].map((t) => (
                 <span key={t} className="flex items-center gap-1 font-accent text-xs text-muted-foreground">
                   <Star size={10} className="text-brand-yellow fill-brand-yellow" />{t}
                 </span>
@@ -171,7 +171,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
         {product.badge}
       </div>
       <div className="absolute top-3 right-3 z-10 bg-brand-black/75 text-brand-yellow font-accent text-[10px] px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-        tap for details
+        View Details
       </div>
       <div className="aspect-square overflow-hidden bg-secondary border-b-2 border-brand-black">
         <img src={product.image} alt={product.name}
@@ -190,7 +190,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
         </div>
         <div className="flex items-center gap-1.5">
           <Truck size={11} className="text-brand-yellow" />
-          <span className="font-accent text-[11px] text-brand-yellow font-bold">Gujarat: FREE · Others: per state</span>
+          <span className="font-accent text-[11px] text-brand-yellow font-bold">Gujarat: Free Delivery  ·  Others: Charges Apply</span>
         </div>
         <div className="font-display text-4xl text-brand-yellow leading-none">{product.price}</div>
         <div className="flex gap-2 mt-auto pt-2" onClick={(e) => e.stopPropagation()}>
@@ -228,11 +228,11 @@ export default function Products() {
       <section id="collection" ref={sectionRef} className="bg-background py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <span className="reveal font-accent text-sm font-bold text-brand-yellow uppercase tracking-[0.3em]">THE DROPS 🧢</span>
+            <span className="reveal font-accent text-sm font-bold text-brand-yellow uppercase tracking-[0.3em]">The Collection</span>
             <h2 className="reveal reveal-delay-1 font-display text-brand-white mt-1"
-              style={{ fontSize: "clamp(4rem,12vw,9rem)", lineHeight: 0.9 }}>FRESH FITS</h2>
+              style={{ fontSize: "clamp(4rem,12vw,9rem)", lineHeight: 0.9 }}>Our Latest Arrivals</h2>
             <p className="reveal reveal-delay-2 font-body text-muted-foreground mt-3 text-sm">
-              one pic per product. real photos. no catfish. 👆 tap any tee for full details.
+              All products are photographed accurately. Click any item to view full details.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

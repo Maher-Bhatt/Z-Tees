@@ -1,6 +1,6 @@
 import { Instagram } from "lucide-react";
+import { Truck, Package, CreditCard } from "lucide-react";
 
-// WhatsApp icon as SVG
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -15,14 +15,13 @@ export default function Footer() {
     { label: "Sizes", href: "#sizes" },
     { label: "How to Order", href: "#how-to-order" },
     { label: "Instagram", href: "https://instagram.com/z_tees.in", external: true },
-    { label: "WhatsApp", href: "https://wa.me/917990407096?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5", external: true },
+    { label: "WhatsApp", href: "https://wa.me/917990407096?text=Hi!%20I%20would%20like%20to%20place%20an%20order%20from%20Z%20Tees.", external: true },
   ];
 
   return (
     <footer className="bg-brand-black border-t-[3px] border-brand-yellow pt-16 pb-8 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-10 mb-12">
-          {/* Brand */}
           <div>
             <div className="font-display text-brand-yellow leading-none" style={{ fontSize: "clamp(3rem, 10vw, 6rem)" }}>
               Z TEES
@@ -36,15 +35,12 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-hover w-10 h-10 rounded-full flex items-center justify-center text-white"
-                style={{
-                  background:
-                    "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                }}
+                style={{ background: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)" }}
               >
                 <Instagram size={18} />
               </a>
               <a
-                href="https://wa.me/917990407096?text=yo!%20i%20want%20to%20order%20from%20Z%20Tees%20%F0%9F%94%A5"
+                href="https://wa.me/917990407096?text=Hi!%20I%20would%20like%20to%20place%20an%20order%20from%20Z%20Tees."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-hover w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white"
@@ -54,7 +50,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Nav links */}
           <div className="flex flex-wrap gap-x-10 gap-y-3">
             {navLinks.map((l) => (
               <a
@@ -70,35 +65,33 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom line */}
-        {/* Delivery Info */}
         <div className="border border-brand-yellow/30 p-4 mb-8 flex flex-col sm:flex-row gap-3 sm:gap-8 items-start sm:items-center">
           <div className="flex items-center gap-2">
-            <span className="text-brand-yellow text-lg">🚚</span>
+            <Truck size={16} className="text-brand-yellow flex-shrink-0" />
             <div>
-              <p className="font-accent font-bold text-brand-yellow text-sm">Gujarat — FREE Delivery</p>
-              <p className="font-body text-muted-foreground text-xs">All orders within Gujarat ship free</p>
+              <p className="font-accent font-bold text-brand-yellow text-sm">Free Delivery in Gujarat</p>
+              <p className="font-body text-muted-foreground text-xs">All orders within Gujarat ship free.</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-lg">📦</span>
+            <Package size={16} className="text-muted-foreground flex-shrink-0" />
             <div>
               <p className="font-accent font-bold text-brand-white text-sm">Outside Gujarat</p>
-              <p className="font-body text-muted-foreground text-xs">Shipping charges apply as per state</p>
+              <p className="font-body text-muted-foreground text-xs">Shipping charges apply based on state.</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-brand-yellow text-lg">💸</span>
+            <CreditCard size={16} className="text-brand-yellow flex-shrink-0" />
             <div>
-              <p className="font-accent font-bold text-brand-yellow text-sm">Pay via UPI</p>
-              <p className="font-body text-muted-foreground text-xs">GPay, PhonePe, Paytm accepted</p>
+              <p className="font-accent font-bold text-brand-yellow text-sm">Secure UPI Payments</p>
+              <p className="font-body text-muted-foreground text-xs">GPay, PhonePe, and Paytm accepted.</p>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 pt-6">
           <p className="font-body text-muted-foreground text-sm text-center">
-            © 2025 Z Tees. Made with 🔥 in India. No boring tees allowed.
+            © 2025 Z Tees. Designed and Made in India.
           </p>
         </div>
       </div>

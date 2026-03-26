@@ -130,7 +130,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className="block w-full py-4 text-center font-display text-3xl bg-green-500 text-white rounded-sm btn-hover"
           >
-            ORDER NOW 💬
+            Order Now
           </a>
         </div>
       </div>
