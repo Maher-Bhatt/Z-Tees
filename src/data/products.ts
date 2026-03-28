@@ -15,7 +15,7 @@ export type Product = {
   originalPrice: number;
   category: 'Graphic' | 'Basic';
   color: string;
-  sizes: { S: boolean; M: boolean; L: boolean };
+  sizes: { S: boolean; M: boolean; L: boolean; XL: boolean };
   images: string[];
   /** Optional back-view image. When present, cards show a front→back flip on hover. */
   backImage?: string;
@@ -26,8 +26,58 @@ export type Product = {
   fit: string;
 };
 
-export const ALL_SIZES = ['S', 'M', 'L'] as const;
+export const ALL_SIZES = ['S', 'M', 'L', 'XL'] as const;
 export type Size = (typeof ALL_SIZES)[number];
+
+export const PRODUCT_SIZE_AVAILABILITY = [
+  {
+    name: 'Shinchan Vibes',
+    sizes: { S: false, M: true, L: true, XL: false },
+  },
+  {
+    name: 'Meow',
+    sizes: { S: false, M: true, L: true, XL: false },
+  },
+  {
+    name: 'Stranger Things',
+    sizes: { S: true, M: false, L: false, XL: false },
+  },
+  {
+    name: 'King in the North',
+    sizes: { S: true, M: true, L: true, XL: false },
+  },
+  {
+    name: 'Batman',
+    sizes: { S: true, M: true, L: false, XL: false },
+  },
+  {
+    name: 'Peace Out',
+    sizes: { S: true, M: true, L: true, XL: false },
+  },
+  {
+    name: 'Gojo',
+    sizes: { S: false, M: true, L: true, XL: false },
+  },
+  {
+    name: 'Pain',
+    sizes: { S: true, M: false, L: false, XL: false },
+  },
+  {
+    name: 'Parshuram',
+    sizes: { S: true, M: true, L: true, XL: false },
+  },
+] as const;
+
+const PRODUCT_SIZE_LOOKUP: Record<string, Product['sizes']> = {
+  'Shinchan Vibes': PRODUCT_SIZE_AVAILABILITY[0].sizes,
+  'Wow Cats': PRODUCT_SIZE_AVAILABILITY[1].sizes,
+  'Stranger Things': PRODUCT_SIZE_AVAILABILITY[2].sizes,
+  'King in the North': PRODUCT_SIZE_AVAILABILITY[3].sizes,
+  'Gotham Nights': PRODUCT_SIZE_AVAILABILITY[4].sizes,
+  'Peace Out': PRODUCT_SIZE_AVAILABILITY[5].sizes,
+  'Gojo Satoru': PRODUCT_SIZE_AVAILABILITY[6].sizes,
+  'Know Pain': PRODUCT_SIZE_AVAILABILITY[7].sizes,
+};
 
 export const PRODUCTS: Product[] = [
   {
@@ -36,7 +86,7 @@ export const PRODUCTS: Product[] = [
     slug: 'shinchan-vibes',
     price: 419, originalPrice: 699,
     category: 'Graphic', color: 'Navy Blue',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Shinchan Vibes'],
     images: [imgShinchan],
     tag: 'Popular',
     stockNote: 'Limited Stock',
@@ -49,7 +99,7 @@ export const PRODUCTS: Product[] = [
     slug: 'peace-out',
     price: 419, originalPrice: 699,
     category: 'Graphic', color: 'Black',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Peace Out'],
     images: [imgPeaceOut],
     tag: 'Best Seller',
     stockNote: '',
@@ -62,7 +112,7 @@ export const PRODUCTS: Product[] = [
     slug: 'stranger-things',
     price: 439, originalPrice: 699,
     category: 'Graphic', color: 'Chocolate Brown',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Stranger Things'],
     images: [imgStranger],
     tag: 'Fan Favourite',
     stockNote: '',
@@ -75,7 +125,7 @@ export const PRODUCTS: Product[] = [
     slug: 'king-in-the-north',
     price: 399, originalPrice: 649,
     category: 'Graphic', color: 'Cream / Off-White',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['King in the North'],
     images: [imgKingNorth],
     tag: 'Fan Favourite',
     stockNote: '',
@@ -88,7 +138,7 @@ export const PRODUCTS: Product[] = [
     slug: 'wow-cats',
     price: 419, originalPrice: 699,
     category: 'Basic', color: 'Dusty Pink',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Wow Cats'],
     images: [imgWowCats],
     tag: '',
     stockNote: '',
@@ -101,7 +151,7 @@ export const PRODUCTS: Product[] = [
     slug: 'gotham-nights',
     price: 409, originalPrice: 699,
     category: 'Graphic', color: 'Black',
-    sizes: { S: true, M: false, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Gotham Nights'],
     images: [imgGotham],
     tag: 'Limited Edition',
     stockNote: 'Only Few Left',
@@ -114,7 +164,7 @@ export const PRODUCTS: Product[] = [
     slug: 'know-pain',
     price: 409, originalPrice: 699,
     category: 'Graphic', color: 'White',
-    sizes: { S: false, M: true, L: false },
+    sizes: PRODUCT_SIZE_LOOKUP['Know Pain'],
     images: [imgKnowPain],
     tag: 'Anime Collection',
     stockNote: 'Only Size M Available',
@@ -127,7 +177,7 @@ export const PRODUCTS: Product[] = [
     slug: 'gojo-satoru',
     price: 409, originalPrice: 699,
     category: 'Graphic', color: 'Black',
-    sizes: { S: true, M: true, L: true },
+    sizes: PRODUCT_SIZE_LOOKUP['Gojo Satoru'],
     images: [imgGojo],
     tag: 'Back Print',
     stockNote: '',
@@ -138,6 +188,28 @@ export const PRODUCTS: Product[] = [
 
 export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find(p => p.slug === slug);
+}
+
+export function getAvailableSizes(product: Product): Size[] {
+  return ALL_SIZES.filter(size => product.sizes[size]);
+}
+
+export function isSizeAvailable(product: Product, size: string): size is Size {
+  return (ALL_SIZES as readonly string[]).includes(size) && product.sizes[size as Size];
+}
+
+export function getAvailabilityNote(product: Product): string {
+  const availableSizes = getAvailableSizes(product);
+
+  if (availableSizes.length === 0) {
+    return 'Out of Stock';
+  }
+
+  if (availableSizes.length === 1) {
+    return `Only Size ${availableSizes[0]} Available`;
+  }
+
+  return product.stockNote;
 }
 
 export const WA_NUMBER = '917990407096';

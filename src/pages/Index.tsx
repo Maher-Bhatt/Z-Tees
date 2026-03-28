@@ -1,12 +1,11 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Truck, ShieldCheck, MessageCircle, Instagram } from 'lucide-react';
-import { PRODUCTS, IG_URL, IG_HANDLE, type Product } from '@/data/products';
+import { PRODUCTS, IG_URL, IG_HANDLE, getAvailableSizes, type Product } from '@/data/products';
 import AppNavbar from '@/components/AppNavbar';
 import AppFooter from '@/components/AppFooter';
 import FloatingButtons from '@/components/FloatingButtons';
 
-/* ─── HERO ──────────────────────────────────────────────────────── */
 function Hero({ scrollToShop }: { scrollToShop: () => void }) {
   return (
     <div className="relative w-full h-[60vh] md:h-[72vh] bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
@@ -35,7 +34,6 @@ function Hero({ scrollToShop }: { scrollToShop: () => void }) {
   );
 }
 
-/* ─── TRUST BAR ─────────────────────────────────────────────────── */
 function TrustBar() {
   const items = [
     'Free Delivery in Gujarat',
@@ -45,15 +43,16 @@ function TrustBar() {
     'Starting at ₹399',
     'Premium Quality Guaranteed',
   ];
+
   return (
     <div className="bg-black text-white py-3 overflow-hidden select-none">
       <div
         className="flex whitespace-nowrap"
         style={{ animation: 'tickerScroll 22s linear infinite' }}
       >
-        {[...items, ...items].map((t, i) => (
-          <span key={i} className="text-[11px] font-bold uppercase tracking-widest px-6 flex-shrink-0">
-            {t} <span className="opacity-25 mx-2">·</span>
+        {[...items, ...items].map((item, index) => (
+          <span key={index} className="text-[11px] font-bold uppercase tracking-widest px-6 flex-shrink-0">
+            {item} <span className="opacity-25 mx-2">·</span>
           </span>
         ))}
       </div>
@@ -61,12 +60,12 @@ function TrustBar() {
   );
 }
 
-/* ─── PRODUCT CARD ──────────────────────────────────────────────── */
 function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
   const hasBackImage = Boolean(product.backImage);
+  const availableSizes = getAvailableSizes(product);
 
   return (
     <button
@@ -76,7 +75,6 @@ function ProductCard({ product }: { product: Product }) {
       className="group text-left flex flex-col w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-sm"
       style={{ perspective: '1000px' }}
     >
-      {/* Image container */}
       <div
         className="relative w-full overflow-hidden mb-3 bg-gray-50"
         style={{
@@ -87,21 +85,18 @@ function ProductCard({ product }: { product: Product }) {
           transition: 'box-shadow 0.4s ease',
         }}
       >
-        {/* Tag badge */}
         {product.tag && (
           <div className="absolute top-2.5 left-2.5 z-20 bg-black text-white text-[9px] font-black uppercase tracking-widest px-2 py-1">
             {product.tag}
           </div>
         )}
 
-        {/* Stock note */}
         {product.stockNote && (
           <div className="absolute bottom-2.5 left-2.5 z-20 bg-white/92 text-black text-[9px] font-bold uppercase tracking-widest px-2 py-1 border border-gray-200 backdrop-blur-sm">
             {product.stockNote}
           </div>
         )}
 
-        {/* FLIP CARD — front → back when backImage exists, else zoom only */}
         {hasBackImage ? (
           <div
             className="w-full h-full relative"
@@ -111,20 +106,18 @@ function ProductCard({ product }: { product: Product }) {
               transform: hovered ? 'rotateY(180deg)' : 'rotateY(0deg)',
             }}
           >
-            {/* Front */}
             <div
               className="absolute inset-0"
               style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
             >
               <img
                 src={product.images[0]}
-                alt={`${product.name} — front`}
+                alt={`${product.name} - front`}
                 loading="lazy"
                 className="w-full h-full object-contain object-center"
                 style={{ padding: '4px' }}
               />
             </div>
-            {/* Back */}
             <div
               className="absolute inset-0"
               style={{
@@ -135,7 +128,7 @@ function ProductCard({ product }: { product: Product }) {
             >
               <img
                 src={product.backImage}
-                alt={`${product.name} — back`}
+                alt={`${product.name} - back`}
                 loading="lazy"
                 className="w-full h-full object-contain object-center"
                 style={{ padding: '4px' }}
@@ -146,7 +139,6 @@ function ProductCard({ product }: { product: Product }) {
             </div>
           </div>
         ) : (
-          /* Zoom-only when no back image */
           <div className="w-full h-full relative overflow-hidden">
             <img
               src={product.images[0]}
@@ -158,7 +150,6 @@ function ProductCard({ product }: { product: Product }) {
                 transform: hovered ? 'scale(1.07)' : 'scale(1)',
               }}
             />
-            {/* "View Details" fade-in overlay */}
             <div
               className="absolute inset-0 flex items-end justify-center pb-4 transition-all duration-400"
               style={{ background: hovered ? 'rgba(0,0,0,0.08)' : 'transparent' }}
@@ -177,7 +168,6 @@ function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      {/* Product info */}
       <div className="px-0.5">
         <div className="flex justify-between items-start gap-2 mb-1.5">
           <div className="flex-1 min-w-0">
@@ -199,23 +189,14 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        {/* Size availability indicators */}
-        <div className="flex items-center gap-1 mt-1">
-          {(Object.entries(product.sizes) as [string, boolean][]).map(([size, available]) => (
-            <span
-              key={size}
-              className={`text-[9px] font-bold px-1.5 py-0.5 border transition-none ${
-                available
-                  ? 'border-gray-300 text-gray-600'
-                  : 'border-gray-100 text-gray-300 line-through'
-              }`}
-            >
-              {size}
-            </span>
-          ))}
-          {/* Flip hint badge — only shown if product has back image */}
+        <div className="mt-2 flex items-start justify-between gap-3">
+          <p className="text-[10px] md:text-[11px] text-gray-500 font-medium">
+            {availableSizes.length > 0
+              ? `Available sizes: ${availableSizes.join(', ')}`
+              : 'Out of Stock'}
+          </p>
           {hasBackImage && (
-            <span className="ml-auto text-[8px] font-bold text-gray-300 uppercase tracking-widest">
+            <span className="text-[8px] font-bold text-gray-300 uppercase tracking-widest flex-shrink-0">
               Hover to flip
             </span>
           )}
@@ -225,7 +206,6 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-/* ─── MAIN PAGE ─────────────────────────────────────────────────── */
 export default function Index() {
   const [filter, setFilter] = useState<'All' | 'Basic' | 'Graphic'>('All');
   const shopRef = useRef<HTMLDivElement>(null);
@@ -255,7 +235,6 @@ export default function Index() {
         <Hero scrollToShop={() => shopRef.current?.scrollIntoView({ behavior: 'smooth' })} />
         <TrustBar />
 
-        {/* Filter bar */}
         <div
           ref={shopRef}
           id="shop-grid"
@@ -281,7 +260,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Product grid */}
         <section className="py-14 md:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-12 sm:gap-x-7 md:gap-y-16">
@@ -292,7 +270,6 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Info strip */}
         <div className="bg-gray-50 border-t border-gray-100 py-12">
           <div className="max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
             {[
@@ -321,7 +298,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Instagram CTA */}
         <div className="bg-black py-16 text-center px-4">
           <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.4em] mb-3">
             Stay Updated
