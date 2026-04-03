@@ -1,22 +1,39 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import {
-  ChevronLeft, Info, AlertCircle, Truck, ShieldCheck,
-  Instagram, MessageCircle, ShoppingBag, Star,
+  Info,
+  AlertCircle,
+  Truck,
+  ShieldCheck,
+  Instagram,
+  MessageCircle,
+  ShoppingBag,
+  Star,
 } from 'lucide-react';
-import { getProductBySlug, ALL_SIZES, WA_NUMBER, IG_URL, type Size } from '@/data/products';
+import {
+  ALL_SIZES,
+  WA_NUMBER,
+  IG_URL,
+  formatPrice,
+  getAvailabilityNote,
+  getAvailableSizes,
+  getProductBySlug,
+  isSizeAvailable,
+  type Size,
+} from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import AppNavbar from '@/components/AppNavbar';
 import AppFooter from '@/components/AppFooter';
 import FloatingButtons from '@/components/FloatingButtons';
 
-/* ─── SIZE GUIDE MODAL ──────────────────────────────────────────── */
 function SizeGuideModal({ onClose }: { onClose: () => void }) {
   const rows = [
     { s: 'S', chest: 38, length: 27 },
     { s: 'M', chest: 40, length: 28 },
     { s: 'L', chest: 42, length: 29 },
+    { s: 'XL', chest: 44, length: 30 },
   ];
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
@@ -24,17 +41,17 @@ function SizeGuideModal({ onClose }: { onClose: () => void }) {
     >
       <div
         className="bg-white w-full max-w-xs p-6 relative shadow-2xl"
-        onClick={e => e.stopPropagation()}
+        onClick={event => event.stopPropagation()}
       >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"
           aria-label="Close"
         >
-          ✕
+          &times;
         </button>
         <h3 className="text-base font-black uppercase tracking-tight mb-1">Size Guide</h3>
-        <p className="text-[10px] text-gray-400 mb-5 uppercase tracking-widest">Measurements in inches · ±1 inch normal</p>
+        <p className="text-[10px] text-gray-400 mb-5 uppercase tracking-widest">Measurements in inches - +/- 1 inch normal</p>
         <table className="w-full text-sm text-left">
           <thead className="bg-gray-50 border-b border-gray-200 text-[10px] tracking-wider font-black uppercase">
             <tr>
@@ -44,11 +61,11 @@ function SizeGuideModal({ onClose }: { onClose: () => void }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {rows.map(r => (
-              <tr key={r.s} className="hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 font-black">{r.s}</td>
-                <td className="py-3 px-4">{r.chest}"</td>
-                <td className="py-3 px-4">{r.length}"</td>
+            {rows.map(row => (
+              <tr key={row.s} className="hover:bg-gray-50 transition-colors">
+                <td className="py-3 px-4 font-black">{row.s}</td>
+                <td className="py-3 px-4">{row.chest}"</td>
+                <td className="py-3 px-4">{row.length}"</td>
               </tr>
             ))}
           </tbody>
@@ -59,10 +76,8 @@ function SizeGuideModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-/* ─── PRODUCT PAGE ──────────────────────────────────────────────── */
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const product = getProductBySlug(slug ?? '');
   const { addToCart } = useCart();
 
@@ -72,7 +87,28 @@ export default function ProductPage() {
   const [addedFeedback, setAddedFeedback] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
 
-  useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  const availableSizes = useMemo(() => (product ? getAvailableSizes(product) : []), [product]);
+  const availabilityNote = product ? getAvailabilityNote(product) : '';
+  const isOutOfStock = availableSizes.length === 0;
+
+  useEffect(() => {
+    if (!product) {
+      return;
+    }
+
+    if (availableSizes.length === 1) {
+      setSelectedSize(availableSizes[0]);
+      setSizeError(false);
+      return;
+    }
+
+    setSelectedSize(current => (current && isSizeAvailable(product, current) ? current : ''));
+    setSizeError(false);
+  }, [availableSizes, product]);
 
   if (!product) {
     return (
@@ -96,17 +132,34 @@ export default function ProductPage() {
 
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
 
+  const handleSelectSize = (size: Size) => {
+    if (!product.sizes[size]) {
+      return;
+    }
+
+    setSelectedSize(size);
+    setSizeError(false);
+  };
+
   const handleAddToCart = () => {
-    if (!selectedSize) { setSizeError(true); return; }
+    if (!selectedSize || !isSizeAvailable(product, selectedSize)) {
+      setSizeError(true);
+      return;
+    }
+
     setSizeError(false);
     addToCart(product, selectedSize);
     setAddedFeedback(true);
-    setTimeout(() => setAddedFeedback(false), 2000);
+    window.setTimeout(() => setAddedFeedback(false), 2000);
   };
 
   const handleBuyNow = () => {
-    if (!selectedSize) { setSizeError(true); return; }
-    const msg = `Hi, I want to order:\n\n1. ${product.name} – Size: ${selectedSize} – ₹${product.price}\n\nTotal: ₹${product.price}\n\nPlease confirm availability.`;
+    if (!selectedSize || !isSizeAvailable(product, selectedSize)) {
+      setSizeError(true);
+      return;
+    }
+
+    const msg = `Hi, I want to order:\n\n1. ${product.name} - Size: ${selectedSize} - ${formatPrice(product.price)}\n\nTotal: ${formatPrice(product.price)}\n\nPlease confirm availability.`;
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
@@ -131,8 +184,6 @@ export default function ProductPage() {
 
       <main className="flex-1 page-in">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-10">
-
-          {/* Breadcrumb */}
           <nav className="flex items-center gap-2 mb-8 text-[10px] font-bold uppercase tracking-widest">
             <Link to="/" className="text-gray-400 hover:text-black transition-colors">Home</Link>
             <span className="text-gray-200">/</span>
@@ -142,10 +193,7 @@ export default function ProductPage() {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
-
-            {/* ─── IMAGE PANEL ─────────────────────────── */}
             <div className="flex flex-col gap-3">
-              {/* Main image */}
               <div
                 className="w-full bg-gray-50 flex items-center justify-center overflow-hidden shadow-sm"
                 style={{ minHeight: 400, aspectRatio: '3/4' }}
@@ -158,30 +206,26 @@ export default function ProductPage() {
                 />
               </div>
 
-              {/* Thumbnail gallery (if multiple images) */}
               {product.images.length > 1 && (
                 <div className="flex gap-2">
-                  {product.images.map((img, i) => (
+                  {product.images.map((img, index) => (
                     <button
-                      key={i}
-                      onClick={() => setActiveImg(i)}
+                      key={index}
+                      onClick={() => setActiveImg(index)}
                       className={`w-16 h-20 bg-gray-50 flex-shrink-0 overflow-hidden border-2 transition-all ${
-                        activeImg === i ? 'border-black' : 'border-transparent hover:border-gray-300'
+                        activeImg === index ? 'border-black' : 'border-transparent hover:border-gray-300'
                       }`}
                     >
-                      <img src={img} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-contain p-1" />
+                      <img src={img} alt={`${product.name} view ${index + 1}`} className="w-full h-full object-contain p-1" />
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* ─── DETAIL PANEL ────────────────────────── */}
             <div className="flex flex-col pb-28 md:pb-0">
-
-              {/* Label + name */}
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-                {product.color} · {product.category}
+                {product.color} - {product.category}
               </span>
               <h1
                 className="font-black text-gray-900 uppercase tracking-tighter leading-none mb-5"
@@ -190,24 +234,25 @@ export default function ProductPage() {
                 {product.name}
               </h1>
 
-              {/* Price row */}
               <div className="flex items-end gap-3 mb-6 pb-6 border-b border-gray-100">
-                <span className="text-3xl font-black text-gray-900">₹{product.price}</span>
-                <span className="text-lg text-gray-400 line-through mb-0.5">₹{product.originalPrice}</span>
+                <span className="text-3xl font-black text-gray-900">{formatPrice(product.price)}</span>
+                <span className="text-lg text-gray-400 line-through mb-0.5">{formatPrice(product.originalPrice)}</span>
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 mb-0.5">
                   {discount}% off
                 </span>
               </div>
 
-              {/* Stock note */}
-              {product.stockNote && (
-                <div className="flex items-center gap-2 mb-5 text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2.5">
+              {availabilityNote && (
+                <div className={`flex items-center gap-2 mb-5 px-3 py-2.5 border ${
+                  isOutOfStock
+                    ? 'text-red-700 bg-red-50 border-red-200'
+                    : 'text-amber-700 bg-amber-50 border-amber-200'
+                }`}>
                   <AlertCircle size={14} className="flex-shrink-0" />
-                  <span className="text-xs font-bold uppercase tracking-wide">{product.stockNote}</span>
+                  <span className="text-xs font-bold uppercase tracking-wide">{availabilityNote}</span>
                 </div>
               )}
 
-              {/* Size selection */}
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-3">
                   <h2 className="text-[11px] font-black text-gray-900 uppercase tracking-widest">Select Size</h2>
@@ -225,7 +270,7 @@ export default function ProductPage() {
                       <button
                         key={size}
                         disabled={!available}
-                        onClick={() => { setSelectedSize(size); setSizeError(false); }}
+                        onClick={() => handleSelectSize(size)}
                         title={!available ? 'Sold Out' : ''}
                         className={`relative w-14 h-12 flex flex-col items-center justify-center text-sm font-black transition-all border-2 ${
                           !available
@@ -245,19 +290,22 @@ export default function ProductPage() {
                     );
                   })}
                 </div>
-                {sizeError && (
+                {sizeError && !isOutOfStock && (
                   <p className="text-red-500 text-xs font-bold mt-2.5 uppercase tracking-wide flex items-center gap-1.5">
-                    <AlertCircle size={12} /> Please select a size to continue.
+                    <AlertCircle size={12} /> Please select an available size to continue.
+                  </p>
+                )}
+                {isOutOfStock && (
+                  <p className="text-red-500 text-xs font-bold mt-2.5 uppercase tracking-wide flex items-center gap-1.5">
+                    <AlertCircle size={12} /> Out of Stock
                   </p>
                 )}
               </div>
 
-              {/* Description */}
               <p className="text-sm text-gray-600 font-medium leading-relaxed mb-6 pb-6 border-b border-gray-100">
                 {product.description}
               </p>
 
-              {/* Fabric / Fit chips */}
               <div className="grid grid-cols-2 gap-3 mb-7">
                 {[
                   { label: 'Fabric', value: product.fabric },
@@ -270,39 +318,44 @@ export default function ProductPage() {
                 ))}
               </div>
 
-              {/* Payment notice */}
               <div className="bg-gray-50 border border-gray-200 px-4 py-3 mb-7 flex items-start gap-2.5">
                 <ShieldCheck size={15} className="text-gray-400 flex-shrink-0 mt-0.5" />
                 <p className="text-xs text-gray-600 font-medium leading-relaxed">
-                  <span className="font-bold text-gray-900">UPI Payments Accepted</span> — GPay, PhonePe, Paytm.
+                  <span className="font-bold text-gray-900">UPI Payments Accepted</span> - GPay, PhonePe, Paytm.
                   Cash on Delivery is not available.
                 </p>
               </div>
 
-              {/* Trust badges */}
               <div className="flex flex-wrap gap-4 mb-7">
-                {['Premium Quality', 'Accurate Images', 'Fast Dispatch', 'Secure Payment'].map(t => (
-                  <span key={t} className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wide">
-                    <Star size={9} className="text-black fill-black" /> {t}
+                {['Premium Quality', 'Accurate Images', 'Fast Dispatch', 'Secure Payment'].map(text => (
+                  <span key={text} className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wide">
+                    <Star size={9} className="text-black fill-black" /> {text}
                   </span>
                 ))}
               </div>
 
-              {/* ─── CTA BUTTONS (desktop) ─────────────── */}
               <div className="hidden md:flex flex-col gap-3">
                 <button
                   onClick={handleAddToCart}
+                  disabled={isOutOfStock}
                   className={`w-full h-14 flex items-center justify-center text-sm font-black uppercase tracking-widest transition-all active:scale-[0.98] border-2 ${
-                    addedFeedback
+                    isOutOfStock
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      : addedFeedback
                       ? 'bg-emerald-600 text-white border-emerald-600'
                       : 'bg-black text-white border-black hover:bg-gray-800'
                   }`}
                 >
-                  {addedFeedback ? '✓ Added to Cart' : 'Add to Cart'}
+                  {isOutOfStock ? 'Out of Stock' : addedFeedback ? 'Added to Cart' : 'Add to Cart'}
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  className="w-full h-14 bg-[#25D366] text-white flex items-center justify-center gap-2 text-sm font-black uppercase tracking-widest hover:bg-[#1db954] transition-all active:scale-[0.98]"
+                  disabled={isOutOfStock}
+                  className={`w-full h-14 flex items-center justify-center gap-2 text-sm font-black uppercase tracking-widest transition-all active:scale-[0.98] ${
+                    isOutOfStock
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-[#25D366] text-white hover:bg-[#1db954]'
+                  }`}
                 >
                   <MessageCircle size={18} /> Buy Now via WhatsApp
                 </button>
@@ -316,7 +369,6 @@ export default function ProductPage() {
                 </a>
               </div>
 
-              {/* Delivery */}
               <div className="mt-6 flex items-start gap-3">
                 <Truck size={15} className="text-gray-400 flex-shrink-0 mt-0.5" />
                 <p className="text-xs text-gray-500 font-medium">
@@ -328,22 +380,29 @@ export default function ProductPage() {
         </div>
       </main>
 
-      {/* ─── STICKY MOBILE CTA ──────────────────────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] slide-up">
         <div className="flex gap-2 px-4 py-3 pb-safe">
           <button
             onClick={handleAddToCart}
+            disabled={isOutOfStock}
             className={`flex-1 h-12 flex items-center justify-center text-xs font-black uppercase tracking-wider transition-all border-2 ${
-              addedFeedback
+              isOutOfStock
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : addedFeedback
                 ? 'bg-emerald-600 text-white border-emerald-600'
                 : 'bg-black text-white border-black active:scale-[0.97]'
             }`}
           >
-            {addedFeedback ? '✓ Added' : 'Add to Cart'}
+            {isOutOfStock ? 'Out of Stock' : addedFeedback ? 'Added' : 'Add to Cart'}
           </button>
           <button
             onClick={handleBuyNow}
-            className="flex-1 h-12 bg-[#25D366] text-white flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider hover:bg-[#1db954] active:scale-[0.97] transition-all"
+            disabled={isOutOfStock}
+            className={`flex-1 h-12 flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider transition-all ${
+              isOutOfStock
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-[#25D366] text-white hover:bg-[#1db954] active:scale-[0.97]'
+            }`}
           >
             <MessageCircle size={15} /> Buy Now
           </button>

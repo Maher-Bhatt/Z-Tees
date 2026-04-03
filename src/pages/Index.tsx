@@ -1,7 +1,15 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Truck, ShieldCheck, MessageCircle, Instagram } from 'lucide-react';
-import { PRODUCTS, IG_URL, IG_HANDLE, getAvailableSizes, type Product } from '@/data/products';
+import {
+  PRODUCTS,
+  IG_URL,
+  IG_HANDLE,
+  formatPrice,
+  getAvailabilityNote,
+  getAvailableSizes,
+  type Product,
+} from '@/data/products';
 import AppNavbar from '@/components/AppNavbar';
 import AppFooter from '@/components/AppFooter';
 import FloatingButtons from '@/components/FloatingButtons';
@@ -21,7 +29,7 @@ function Hero({ scrollToShop }: { scrollToShop: () => void }) {
           Minimal Streetwear.<br />Maximum Presence.
         </h1>
         <p className="text-sm md:text-base text-gray-400 mb-10 font-medium">
-          Starting at ₹399&nbsp;&nbsp;·&nbsp;&nbsp;Free Delivery in Gujarat&nbsp;&nbsp;·&nbsp;&nbsp;Order via WhatsApp
+          Starting at {formatPrice(399)}&nbsp;&nbsp;&middot;&nbsp;&nbsp;Free Delivery in Gujarat&nbsp;&nbsp;&middot;&nbsp;&nbsp;Order via WhatsApp
         </p>
         <button
           onClick={scrollToShop}
@@ -40,7 +48,7 @@ function TrustBar() {
     'UPI Payments Accepted',
     'Cash on Delivery Not Available',
     'Order via WhatsApp',
-    'Starting at ₹399',
+    `Starting at ${formatPrice(399)}`,
     'Premium Quality Guaranteed',
   ];
 
@@ -52,7 +60,7 @@ function TrustBar() {
       >
         {[...items, ...items].map((item, index) => (
           <span key={index} className="text-[11px] font-bold uppercase tracking-widest px-6 flex-shrink-0">
-            {item} <span className="opacity-25 mx-2">·</span>
+            {item} <span className="opacity-25 mx-2">&middot;</span>
           </span>
         ))}
       </div>
@@ -66,6 +74,7 @@ function ProductCard({ product }: { product: Product }) {
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
   const hasBackImage = Boolean(product.backImage);
   const availableSizes = getAvailableSizes(product);
+  const availabilityNote = getAvailabilityNote(product);
 
   return (
     <button
@@ -91,9 +100,9 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         )}
 
-        {product.stockNote && (
+        {availabilityNote && (
           <div className="absolute bottom-2.5 left-2.5 z-20 bg-white/92 text-black text-[9px] font-bold uppercase tracking-widest px-2 py-1 border border-gray-200 backdrop-blur-sm">
-            {product.stockNote}
+            {availabilityNote}
           </div>
         )}
 
@@ -179,9 +188,9 @@ function ProductCard({ product }: { product: Product }) {
             </p>
           </div>
           <div className="text-right flex-shrink-0">
-            <p className="text-xs md:text-sm font-black text-gray-900">₹{product.price}</p>
+            <p className="text-xs md:text-sm font-black text-gray-900">{formatPrice(product.price)}</p>
             <div className="flex items-center gap-1 justify-end mt-0.5">
-              <p className="text-[10px] text-gray-400 line-through">₹{product.originalPrice}</p>
+              <p className="text-[10px] text-gray-400 line-through">{formatPrice(product.originalPrice)}</p>
               <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.5">
                 {discount}% off
               </span>
@@ -210,7 +219,7 @@ export default function Index() {
   const [filter, setFilter] = useState<'All' | 'Basic' | 'Graphic'>('All');
   const shopRef = useRef<HTMLDivElement>(null);
   const categories = ['All', 'Basic', 'Graphic'] as const;
-  const filtered = filter === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+  const filtered = filter === 'All' ? PRODUCTS : PRODUCTS.filter(product => product.category === filter);
 
   return (
     <div
@@ -244,17 +253,17 @@ export default function Index() {
             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300 flex-shrink-0">
               Filter
             </span>
-            {categories.map(cat => (
+            {categories.map(category => (
               <button
-                key={cat}
-                onClick={() => setFilter(cat)}
+                key={category}
+                onClick={() => setFilter(category)}
                 className={`text-[11px] font-black uppercase tracking-widest flex-shrink-0 transition-all pb-0.5 ${
-                  filter === cat
+                  filter === category
                     ? 'text-black border-b-2 border-black'
                     : 'text-gray-400 hover:text-gray-800'
                 }`}
               >
-                {cat}
+                {category}
               </button>
             ))}
           </div>
