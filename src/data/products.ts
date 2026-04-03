@@ -10,6 +10,7 @@ import imgPoMark from '@/assets/po-mark.jpeg';
 import imgBoxHead from '@/assets/box-head.jpeg';
 import imgSpiderman from '@/assets/spiderman-tee.jpeg';
 import imgHoodedHero from '@/assets/hooded-hero.png';
+import imgParshuram from '@/assets/parshuram-tee.jpeg';
 
 export type Product = {
   id: string;
@@ -68,7 +69,7 @@ export const PRODUCT_SIZE_AVAILABILITY = [
   },
   {
     name: 'Parshuram',
-    sizes: { S: true, M: true, L: true, XL: false },
+    sizes: { S: true, M: true, L: true, XL: true },
   },
   {
     name: 'PoMark',
@@ -97,6 +98,7 @@ const PRODUCT_SIZE_LOOKUP: Record<string, Product['sizes']> = {
   'Peace Out': PRODUCT_SIZE_AVAILABILITY[5].sizes,
   'Gojo Satoru': PRODUCT_SIZE_AVAILABILITY[6].sizes,
   'Know Pain': PRODUCT_SIZE_AVAILABILITY[7].sizes,
+  Parshuram: PRODUCT_SIZE_AVAILABILITY[8].sizes,
   PoMark: PRODUCT_SIZE_AVAILABILITY[9].sizes,
   'Box Head': PRODUCT_SIZE_AVAILABILITY[10].sizes,
   'Spider-Man': PRODUCT_SIZE_AVAILABILITY[11].sizes,
@@ -293,6 +295,22 @@ export const PRODUCTS: Product[] = [
     tag: 'New Drop',
     stockNote: '',
     description: 'Cream-white tee with a striking hooded anime-inspired figure in cool blue tones for a standout modern streetwear feel.',
+    fabric: '100% Premium Cotton',
+    fit: 'Regular Fit',
+  },
+  {
+    id: 'prod_13',
+    name: 'Parshuram',
+    slug: 'parshuram',
+    price: 409,
+    originalPrice: 699,
+    category: 'Graphic',
+    color: 'White',
+    sizes: PRODUCT_SIZE_LOOKUP.Parshuram,
+    images: [imgParshuram],
+    tag: 'New Drop',
+    stockNote: '',
+    description: 'White graphic tee with a clean front and a bold Parshuram illustration on the back, finished with vintage-style typography for a strong streetwear look.',
     fabric: '100% Premium Cotton',
     fit: 'Regular Fit',
   },
