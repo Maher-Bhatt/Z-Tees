@@ -24,8 +24,7 @@ export type Product = {
   category: 'Graphic' | 'Basic';
   color: string;
   sizes: { S: boolean; M: boolean; L: boolean; XL: boolean };
-  images: string[];
-  backImage?: string;
+  images: string[]; // images[0] = front, images[1] = back (optional)
   tag: string;
   stockNote: string;
   description: string;
@@ -166,7 +165,7 @@ export const PRODUCTS: Product[] = [
     category: 'Graphic',
     color: 'Black',
     sizes: PRODUCT_SIZE_LOOKUP['Enjoy the Madness'],
-    images: [imgEnjoyTheMadness],
+    images: [imgEnjoyTheMadness, imgEnjoyTheMadnessV2],
     tag: 'Back Print',
     stockNote: '',
     description: 'Black graphic tee with a clean front and a bold Enjoy the Madness back print featuring a hooded skater character, glowing eyes, and gritty street-art styling.',
@@ -360,23 +359,6 @@ export const PRODUCTS: Product[] = [
     fit: 'Regular Fit',
   },
 
-  // NEW RELEASES
-  {
-    id: 'prod_15',
-    name: 'Madness Skater',
-    slug: 'madness-skater',
-    price: 409,
-    originalPrice: 699,
-    category: 'Graphic',
-    color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Madness Skater'],
-    images: [imgEnjoyTheMadnessV2],
-    tag: 'New Drop',
-    stockNote: '',
-    description: 'Bold streetwear graphic featuring an extreme action skater character with glowing energy effects. "Enjoy the Madness" with "Extreme Traction" motif. Street culture meets extreme sports energy on premium black cotton.',
-    fabric: '100% Premium Cotton',
-    fit: 'Regular Fit',
-  },
   {
     id: 'prod_16',
     name: 'Essential Black',

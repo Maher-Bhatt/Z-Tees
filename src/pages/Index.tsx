@@ -72,7 +72,7 @@ function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
-  const hasBackImage = Boolean(product.backImage);
+  const hasBackImage = product.images.length > 1;
   const availableSizes = getAvailableSizes(product);
   const availabilityNote = getAvailabilityNote(product);
 
@@ -136,7 +136,7 @@ function ProductCard({ product }: { product: Product }) {
               }}
             >
               <img
-                src={product.backImage}
+                src={product.images[1]}
                 alt={`${product.name} - back`}
                 loading="lazy"
                 className="w-full h-full object-contain object-center"
