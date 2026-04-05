@@ -11,6 +11,7 @@ import imgBoxHead from '@/assets/box-head.jpeg';
 import imgSpiderman from '@/assets/spiderman-tee.jpeg';
 import imgHoodedHero from '@/assets/hooded-hero.png';
 import imgParshuram from '@/assets/parshuram-tee.jpeg';
+import imgEnjoyTheMadness from '@/assets/enjoy-the-madness.jpeg';
 
 export type Product = {
   id: string;
@@ -87,6 +88,10 @@ export const PRODUCT_SIZE_AVAILABILITY = [
     name: 'Hooded Hero',
     sizes: { S: true, M: true, L: true, XL: true },
   },
+  {
+    name: 'Enjoy the Madness',
+    sizes: { S: true, M: true, L: true, XL: true },
+  },
 ] as const;
 
 const PRODUCT_SIZE_LOOKUP: Record<string, Product['sizes']> = {
@@ -103,6 +108,7 @@ const PRODUCT_SIZE_LOOKUP: Record<string, Product['sizes']> = {
   'Box Head': PRODUCT_SIZE_AVAILABILITY[10].sizes,
   'Spider-Man': PRODUCT_SIZE_AVAILABILITY[11].sizes,
   'Hooded Hero': PRODUCT_SIZE_AVAILABILITY[12].sizes,
+  'Enjoy the Madness': PRODUCT_SIZE_AVAILABILITY[13].sizes,
 };
 
 export const PRODUCTS: Product[] = [
@@ -311,6 +317,22 @@ export const PRODUCTS: Product[] = [
     tag: 'New Drop',
     stockNote: '',
     description: 'White graphic tee with a clean front and a bold Parshuram illustration on the back, finished with vintage-style typography for a strong streetwear look.',
+    fabric: '100% Premium Cotton',
+    fit: 'Regular Fit',
+  },
+  {
+    id: 'prod_14',
+    name: 'Enjoy the Madness',
+    slug: 'enjoy-the-madness',
+    price: 409,
+    originalPrice: 699,
+    category: 'Graphic',
+    color: 'Black',
+    sizes: PRODUCT_SIZE_LOOKUP['Enjoy the Madness'],
+    images: [imgEnjoyTheMadness],
+    tag: 'Back Print',
+    stockNote: '',
+    description: 'Black graphic tee with a clean front and a bold Enjoy the Madness back print featuring a hooded skater character, glowing eyes, and gritty street-art styling.',
     fabric: '100% Premium Cotton',
     fit: 'Regular Fit',
   },
