@@ -165,7 +165,7 @@ export const PRODUCTS: Product[] = [
     category: 'Graphic',
     color: 'Black',
     sizes: PRODUCT_SIZE_LOOKUP['Enjoy the Madness'],
-    images: [imgEnjoyTheMadness, imgEnjoyTheMadnessV2],
+    images: [imgBlankTee, imgEnjoyTheMadness, imgEnjoyTheMadnessV2],
     tag: 'Back Print',
     stockNote: '',
     description: 'Black graphic tee with a clean front and a bold Enjoy the Madness back print featuring a hooded skater character, glowing eyes, and gritty street-art styling.',
@@ -359,23 +359,7 @@ export const PRODUCTS: Product[] = [
     fit: 'Regular Fit',
   },
 
-  {
-    id: 'prod_16',
-    name: 'Essential Black',
-    slug: 'essential-black',
-    price: 299,
-    originalPrice: 399,
-    category: 'Basic',
-    color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Essential Black'],
-    images: [imgBlankTee],
-    tag: 'Basic Essentials',
-    stockNote: '',
-    description: 'Premium quality blank black tee - the perfect canvas for your style. Clean minimalist design made from 100% soft premium cotton. A wardrobe staple that works with everything.',
-    fabric: '100% Premium Cotton',
-    fit: 'Regular Fit',
-  },
-];
+];;
 
 export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find(product => product.slug === slug);
