@@ -1,129 +1,85 @@
-import imgShinchan from '@/assets/shinchan-vibes.jpeg';
-import imgPeaceOut from '@/assets/peace-out.jpeg';
-import imgStranger from '@/assets/gang-walk.jpeg';
-import imgKingNorth from '@/assets/king-north.jpeg';
-import imgWowCats from '@/assets/wow-cats.jpeg';
-import imgGotham from '@/assets/gotham-nights.jpeg';
-import imgKnowPain from '@/assets/pain-tee.jpeg';
-import imgGojo from '@/assets/gojo-tee.jpeg';
-import imgPoMark from '@/assets/po-mark.jpeg';
-import imgBoxHead from '@/assets/box-head.jpeg';
-import imgSpiderman from '@/assets/spiderman-tee.jpeg';
-import imgHoodedHero from '@/assets/hooded-hero.png';
-import imgParshuram from '@/assets/parshuram-tee.jpeg';
-import imgEnjoyTheMadness from '@/assets/enjoy-the-madness.jpeg';
-import imgEnjoyTheMadnessV2 from '@/assets/enjoy-the-madness-v2.jpeg';
-import imgBlankTee from '@/assets/blank-tee.jpeg';
+// ─── Asset imports ───────────────────────────────────────────────────────────
+import imgShinchan        from '@/assets/shinchan-vibes.jpeg';
+import imgPeaceOut        from '@/assets/peace-out.jpeg';
+import imgStranger        from '@/assets/gang-walk.jpeg';
+import imgKingNorth       from '@/assets/king-north.jpeg';
+import imgWowCats         from '@/assets/wow-cats.jpeg';
+import imgGotham          from '@/assets/gotham-nights.jpeg';
+import imgKnowPain        from '@/assets/pain-tee.jpeg';
+import imgGojo            from '@/assets/gojo-tee.jpeg';
+import imgPoMark          from '@/assets/po-mark.jpeg';
+import imgBoxHead         from '@/assets/box-head.jpeg';
+import imgSpiderman       from '@/assets/spiderman-tee.jpeg';
+import imgHoodedHero      from '@/assets/hooded-hero.png';
+import imgParshuram       from '@/assets/parshuram-tee.jpeg';
+import imgEnjoyMadness    from '@/assets/enjoy-the-madness.jpeg';
+import imgEnjoyMadnessV2  from '@/assets/enjoy-the-madness-v2.jpeg';
+import imgBlankTee        from '@/assets/blank-tee.jpeg';
 
-export type Product = {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export const ALL_SIZES = ['S', 'M', 'L', 'XL'] as const;
+export type Size = (typeof ALL_SIZES)[number];
+export type Category = 'Graphic' | 'Basic';
+
+/** Per-size availability map */
+export type SizeAvailability = Record<Size, boolean>;
+
+/**
+ * Single product record.
+ * `images[0]` = primary / front view.
+ * Additional images are gallery entries (back, detail shots, lifestyle, etc.)
+ * No separate "back product" entry is needed.
+ */
+export interface Product {
   id: string;
   name: string;
   slug: string;
   price: number;
   originalPrice: number;
-  category: 'Graphic' | 'Basic';
+  category: Category;
   color: string;
-  sizes: { S: boolean; M: boolean; L: boolean; XL: boolean };
-  images: string[]; // images[0] = front, images[1] = back (optional)
+  sizes: SizeAvailability;
+  /** Ordered gallery — index 0 is always the primary image shown in cards */
+  images: string[];
   tag: string;
   stockNote: string;
   description: string;
   fabric: string;
   fit: string;
-};
+}
 
-export const ALL_SIZES = ['S', 'M', 'L', 'XL'] as const;
-export type Size = (typeof ALL_SIZES)[number];
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 export const INR_SYMBOL = '\u20B9';
+export const WA_NUMBER  = '917990407096';
+export const IG_URL     = 'https://instagram.com/z_tees.in';
+export const IG_HANDLE  = 'z_tees.in';
 
-export const PRODUCT_SIZE_AVAILABILITY = [
-  {
-    name: 'Shinchan Vibes',
-    sizes: { S: false, M: true, L: true, XL: false },
-  },
-  {
-    name: 'Wow Cats',
-    sizes: { S: false, M: true, L: true, XL: false },
-  },
-  {
-    name: 'Stranger Things',
-    sizes: { S: true, M: false, L: false, XL: false },
-  },
-  {
-    name: 'King in the North',
-    sizes: { S: true, M: true, L: true, XL: false },
-  },
-  {
-    name: 'Gotham Nights',
-    sizes: { S: true, M: true, L: false, XL: false },
-  },
-  {
-    name: 'Peace Out',
-    sizes: { S: true, M: true, L: true, XL: false },
-  },
-  {
-    name: 'Gojo Satoru',
-    sizes: { S: false, M: true, L: true, XL: false },
-  },
-  {
-    name: 'Know Pain',
-    sizes: { S: true, M: false, L: false, XL: false },
-  },
-  {
-    name: 'Parshuram',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'PoMark',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'Box Head',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'Spider-Man',
-    sizes: { S: true, M: false, L: false, XL: false },
-  },
-  {
-    name: 'Hooded Hero',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'Enjoy the Madness',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'Madness Skater',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-  {
-    name: 'Essential Black',
-    sizes: { S: true, M: true, L: true, XL: true },
-  },
-] as const;
+// ─── Size availability (single source of truth) ───────────────────────────────
+// Defined once here — no separate PRODUCT_SIZE_AVAILABILITY array needed.
 
-const PRODUCT_SIZE_LOOKUP: Record<string, Product['sizes']> = {
-  'Shinchan Vibes': PRODUCT_SIZE_AVAILABILITY[0].sizes,
-  'Wow Cats': PRODUCT_SIZE_AVAILABILITY[1].sizes,
-  'Stranger Things': PRODUCT_SIZE_AVAILABILITY[2].sizes,
-  'King in the North': PRODUCT_SIZE_AVAILABILITY[3].sizes,
-  'Gotham Nights': PRODUCT_SIZE_AVAILABILITY[4].sizes,
-  'Peace Out': PRODUCT_SIZE_AVAILABILITY[5].sizes,
-  'Gojo Satoru': PRODUCT_SIZE_AVAILABILITY[6].sizes,
-  'Know Pain': PRODUCT_SIZE_AVAILABILITY[7].sizes,
-  Parshuram: PRODUCT_SIZE_AVAILABILITY[8].sizes,
-  PoMark: PRODUCT_SIZE_AVAILABILITY[9].sizes,
-  'Box Head': PRODUCT_SIZE_AVAILABILITY[10].sizes,
-  'Spider-Man': PRODUCT_SIZE_AVAILABILITY[11].sizes,
-  'Hooded Hero': PRODUCT_SIZE_AVAILABILITY[12].sizes,
-  'Enjoy the Madness': PRODUCT_SIZE_AVAILABILITY[13].sizes,
-  'Madness Skater': PRODUCT_SIZE_AVAILABILITY[14].sizes,
-  'Essential Black': PRODUCT_SIZE_AVAILABILITY[15].sizes,
+const SIZES: Record<string, SizeAvailability> = {
+  'Shinchan Vibes':    { S: false, M: true,  L: true,  XL: false },
+  'Peace Out':         { S: true,  M: true,  L: true,  XL: false },
+  'Enjoy the Madness': { S: true,  M: true,  L: true,  XL: true  },
+  'Gojo Satoru':       { S: false, M: true,  L: true,  XL: false },
+  'Know Pain':         { S: true,  M: false, L: false, XL: false },
+  'Stranger Things':   { S: true,  M: false, L: false, XL: false },
+  'King in the North': { S: true,  M: true,  L: true,  XL: false },
+  'Gotham Nights':     { S: true,  M: true,  L: false, XL: false },
+  'PoMark':            { S: true,  M: true,  L: true,  XL: true  },
+  'Box Head':          { S: true,  M: true,  L: true,  XL: true  },
+  'Spider-Man':        { S: true,  M: false, L: false, XL: false },
+  'Hooded Hero':       { S: true,  M: true,  L: true,  XL: true  },
+  'Parshuram':         { S: true,  M: true,  L: true,  XL: true  },
+  'Wow Cats':          { S: false, M: true,  L: false, XL: true  },
 };
+
+// ─── Product catalogue ────────────────────────────────────────────────────────
 
 export const PRODUCTS: Product[] = [
-  // BEST SELLERS & POPULAR
+  // ── Best Sellers ────────────────────────────────────────────────────────────
   {
     id: 'prod_1',
     name: 'Shinchan Vibes',
@@ -132,7 +88,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Navy Blue',
-    sizes: PRODUCT_SIZE_LOOKUP['Shinchan Vibes'],
+    sizes: SIZES['Shinchan Vibes'],
     images: [imgShinchan],
     tag: 'Best Seller',
     stockNote: 'Limited Stock',
@@ -148,7 +104,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Peace Out'],
+    sizes: SIZES['Peace Out'],
     images: [imgPeaceOut],
     tag: 'Best Seller',
     stockNote: '',
@@ -156,6 +112,8 @@ export const PRODUCTS: Product[] = [
     fabric: '100% Premium Cotton',
     fit: 'Oversized Fit',
   },
+
+  // ── Gallery product — multiple images, no duplicate cards ──────────────────
   {
     id: 'prod_3',
     name: 'Enjoy the Madness',
@@ -164,8 +122,9 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Enjoy the Madness'],
-    images: [imgBlankTee, imgEnjoyTheMadness, imgEnjoyTheMadnessV2],
+    sizes: SIZES['Enjoy the Madness'],
+    // Three images: front detail, skater back print, plain blank reference
+    images: [imgEnjoyMadness, imgEnjoyMadnessV2, imgBlankTee],
     tag: 'Back Print',
     stockNote: '',
     description: 'Black graphic tee with a clean front and a bold Enjoy the Madness back print featuring a hooded skater character, glowing eyes, and gritty street-art styling.',
@@ -173,7 +132,7 @@ export const PRODUCTS: Product[] = [
     fit: 'Regular Fit',
   },
 
-  // ANIME COLLECTION
+  // ── Anime Collection ────────────────────────────────────────────────────────
   {
     id: 'prod_4',
     name: 'Gojo Satoru',
@@ -182,7 +141,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Gojo Satoru'],
+    sizes: SIZES['Gojo Satoru'],
     images: [imgGojo],
     tag: 'Anime Collection',
     stockNote: '',
@@ -198,7 +157,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'White',
-    sizes: PRODUCT_SIZE_LOOKUP['Know Pain'],
+    sizes: SIZES['Know Pain'],
     images: [imgKnowPain],
     tag: 'Anime Collection',
     stockNote: '',
@@ -207,7 +166,7 @@ export const PRODUCTS: Product[] = [
     fit: 'Regular Fit',
   },
 
-  // FANFAVOURITE COLLECTION
+  // ── Fan Favourites ──────────────────────────────────────────────────────────
   {
     id: 'prod_6',
     name: 'Stranger Things',
@@ -216,7 +175,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Chocolate Brown',
-    sizes: PRODUCT_SIZE_LOOKUP['Stranger Things'],
+    sizes: SIZES['Stranger Things'],
     images: [imgStranger],
     tag: 'Fan Favourite',
     stockNote: 'Only Size S Available',
@@ -232,7 +191,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 649,
     category: 'Graphic',
     color: 'Cream / Off-White',
-    sizes: PRODUCT_SIZE_LOOKUP['King in the North'],
+    sizes: SIZES['King in the North'],
     images: [imgKingNorth],
     tag: 'Fan Favourite',
     stockNote: '',
@@ -241,7 +200,7 @@ export const PRODUCTS: Product[] = [
     fit: 'Regular Fit',
   },
 
-  // PREMIUM COLLECTION
+  // ── Limited Edition ─────────────────────────────────────────────────────────
   {
     id: 'prod_8',
     name: 'Gotham Nights',
@@ -250,16 +209,16 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Gotham Nights'],
+    sizes: SIZES['Gotham Nights'],
     images: [imgGotham],
     tag: 'Limited Edition',
     stockNote: 'Only Few Left',
-    description: "The iconic bat symbol with Gotham's city skyline etched inside. A clean, refined graphic. Limited edition and it will not be restocked once sold out.",
+    description: "The iconic bat symbol with Gotham's city skyline etched inside. A clean, refined graphic. Limited edition — will not be restocked once sold out.",
     fabric: '100% Premium Cotton',
     fit: 'Oversized Fit',
   },
 
-  // ARTISTIC PRINTS
+  // ── New Drops ───────────────────────────────────────────────────────────────
   {
     id: 'prod_9',
     name: 'PoMark',
@@ -268,7 +227,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Cream White',
-    sizes: PRODUCT_SIZE_LOOKUP.PoMark,
+    sizes: SIZES['PoMark'],
     images: [imgPoMark],
     tag: 'New Drop',
     stockNote: '',
@@ -284,7 +243,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Off White',
-    sizes: PRODUCT_SIZE_LOOKUP['Box Head'],
+    sizes: SIZES['Box Head'],
     images: [imgBoxHead],
     tag: 'New Drop',
     stockNote: '',
@@ -300,7 +259,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Black',
-    sizes: PRODUCT_SIZE_LOOKUP['Spider-Man'],
+    sizes: SIZES['Spider-Man'],
     images: [imgSpiderman],
     tag: 'New Drop',
     stockNote: 'Only Size S Available',
@@ -316,7 +275,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Cream White',
-    sizes: PRODUCT_SIZE_LOOKUP['Hooded Hero'],
+    sizes: SIZES['Hooded Hero'],
     images: [imgHoodedHero],
     tag: 'New Drop',
     stockNote: '',
@@ -332,16 +291,16 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'White',
-    sizes: PRODUCT_SIZE_LOOKUP.Parshuram,
+    sizes: SIZES['Parshuram'],
     images: [imgParshuram],
     tag: 'New Drop',
     stockNote: '',
-    description: 'White graphic tee with a clean front and a bold Parshuram illustration on the back, finished with vintage-style typography for a strong streetwear look.',
+    description: 'White graphic tee with a clean front and a bold Parshuram illustration on the back, finished with vintage-style typography.',
     fabric: '100% Premium Cotton',
     fit: 'Regular Fit',
   },
 
-  // QUIRKY & FUN COLLECTION
+  // ── Quirky & Fun ────────────────────────────────────────────────────────────
   {
     id: 'prod_14',
     name: 'Wow Cats',
@@ -350,23 +309,24 @@ export const PRODUCTS: Product[] = [
     originalPrice: 699,
     category: 'Graphic',
     color: 'Dusty Pink',
-    sizes: PRODUCT_SIZE_LOOKUP['Wow Cats'],
+    sizes: SIZES['Wow Cats'],
     images: [imgWowCats],
     tag: 'Fun Collection',
     stockNote: '',
-    description: 'Three stacked cartoon cats printed on the side of a dusty pink tee, with WOW!! and Hi typography integrated into the design. Soft, breathable premium cotton.',
+    description: 'Three stacked cartoon cats printed on the side of a dusty pink tee, with WOW!! and Hi typography. Soft, breathable premium cotton.',
     fabric: '100% Premium Cotton',
     fit: 'Regular Fit',
   },
+];
 
-];;
+// ─── Helper functions ─────────────────────────────────────────────────────────
 
 export function getProductBySlug(slug: string): Product | undefined {
-  return PRODUCTS.find(product => product.slug === slug);
+  return PRODUCTS.find(p => p.slug === slug);
 }
 
 export function getAvailableSizes(product: Product): Size[] {
-  return ALL_SIZES.filter(size => product.sizes[size]);
+  return ALL_SIZES.filter(s => product.sizes[s]);
 }
 
 export function isSizeAvailable(product: Product, size: string): size is Size {
@@ -377,27 +337,30 @@ export function formatPrice(value: number): string {
   return `${INR_SYMBOL}${value}`;
 }
 
+export function getDiscountPercent(product: Product): number {
+  return Math.round((1 - product.price / product.originalPrice) * 100);
+}
+
+/** Derives a human-readable stock note from live size data. */
 export function getAvailabilityNote(product: Product): string {
-  const availableSizes = getAvailableSizes(product);
-
-  if (availableSizes.length === 0) {
-    return 'Out of Stock';
-  }
-
-  if (availableSizes.length === 1) {
-    return `Only Size ${availableSizes[0]} Available`;
-  }
-
+  const available = getAvailableSizes(product);
+  if (available.length === 0) return 'Out of Stock';
+  if (available.length === 1) return `Only Size ${available[0]} Available`;
   return product.stockNote;
 }
 
-export const WA_NUMBER = '917990407096';
-export const IG_URL = 'https://instagram.com/z_tees.in';
-export const IG_HANDLE = 'z_tees.in';
+// ─── Cart / WhatsApp helpers ──────────────────────────────────────────────────
 
-export function buildWhatsAppURL(cart: Array<{ product: Product; size: string; qty: number }>) {
-  const lines = cart.map((item, index) =>
-    `${index + 1}. ${item.product.name} - Size: ${item.size} - ${formatPrice(item.product.price)}${item.qty > 1 ? ` x${item.qty}` : ''}`
+export interface CartLineItem {
+  product: Product;
+  size: string;
+  qty: number;
+}
+
+export function buildWhatsAppURL(cart: CartLineItem[]): string {
+  const lines = cart.map(
+    (item, i) =>
+      `${i + 1}. ${item.product.name} - Size: ${item.size} - ${formatPrice(item.product.price)}${item.qty > 1 ? ` x${item.qty}` : ''}`,
   );
   const total = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
   const msg = [

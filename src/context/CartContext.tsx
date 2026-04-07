@@ -1,69 +1,124 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import { isSizeAvailable, type Product } from '@/data/products';
 
-export type CartItem = {
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
+export interface CartItem {
   cartId: string;
   product: Product;
   size: string;
   qty: number;
-};
+}
 
-type CartContextType = {
+interface CartState {
+  cart: CartItem[];
+}
+
+type CartAction =
+  | { type: 'ADD';    product: Product; size: string }
+  | { type: 'UPDATE'; cartId: string;   qty: number  }
+  | { type: 'REMOVE'; cartId: string                 }
+  | { type: 'CLEAR'                                  }
+  | { type: 'HYDRATE'; cart: CartItem[]              };
+
+interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product, size: string) => void;
   updateQty: (cartId: string, qty: number) => void;
   removeItem: (cartId: string) => void;
+  clearCart: () => void;
   totalItems: number;
-};
+}
+
+// ─── Reducer (pure — easy to test) ───────────────────────────────────────────
+
+const STORAGE_KEY = 'ztees_cart_v1';
+
+function cartReducer(state: CartState, action: CartAction): CartState {
+  switch (action.type) {
+    case 'HYDRATE':
+      return { cart: action.cart };
+
+    case 'ADD': {
+      if (!isSizeAvailable(action.product, action.size)) return state;
+      const existing = state.cart.find(
+        item => item.product.id === action.product.id && item.size === action.size,
+      );
+      if (existing) {
+        return {
+          cart: state.cart.map(item =>
+            item.cartId === existing.cartId ? { ...item, qty: item.qty + 1 } : item,
+          ),
+        };
+      }
+      return {
+        cart: [
+          ...state.cart,
+          { cartId: `${Date.now()}-${Math.random()}`, product: action.product, size: action.size, qty: 1 },
+        ],
+      };
+    }
+
+    case 'UPDATE':
+      if (action.qty < 1) return { cart: state.cart.filter(item => item.cartId !== action.cartId) };
+      return { cart: state.cart.map(item => (item.cartId === action.cartId ? { ...item, qty: action.qty } : item)) };
+
+    case 'REMOVE':
+      return { cart: state.cart.filter(item => item.cartId !== action.cartId) };
+
+    case 'CLEAR':
+      return { cart: [] };
+
+    default:
+      return state;
+  }
+}
+
+// ─── Context ──────────────────────────────────────────────────────────────────
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [state, dispatch] = useReducer(cartReducer, { cart: [] });
 
-  const addToCart = (product: Product, size: string) => {
-    if (!isSizeAvailable(product, size)) {
-      return;
-    }
-
-    setCart(prev => {
-      const existing = prev.find(item => item.product.id === product.id && item.size === size);
-      if (existing) {
-        return prev.map(item =>
-          item.cartId === existing.cartId ? { ...item, qty: item.qty + 1 } : item
-        );
+  // Hydrate from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as CartItem[];
+        if (Array.isArray(parsed)) dispatch({ type: 'HYDRATE', cart: parsed });
       }
-
-      return [...prev, { cartId: `${Date.now()}-${Math.random()}`, product, size, qty: 1 }];
-    });
-  };
-
-  const updateQty = (cartId: string, qty: number) => {
-    if (qty < 1) {
-      setCart(prev => prev.filter(item => item.cartId !== cartId));
-      return;
+    } catch {
+      // Corrupt storage — start fresh
     }
+  }, []);
 
-    setCart(prev => prev.map(item => (item.cartId === cartId ? { ...item, qty } : item)));
-  };
+  // Persist to localStorage on every change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cart));
+    } catch {
+      // Storage full or unavailable — silently ignore
+    }
+  }, [state.cart]);
 
-  const removeItem = (cartId: string) =>
-    setCart(prev => prev.filter(item => item.cartId !== cartId));
+  const addToCart  = useCallback((product: Product, size: string) => dispatch({ type: 'ADD', product, size }), []);
+  const updateQty  = useCallback((cartId: string, qty: number)    => dispatch({ type: 'UPDATE', cartId, qty }), []);
+  const removeItem = useCallback((cartId: string)                 => dispatch({ type: 'REMOVE', cartId }), []);
+  const clearCart  = useCallback(()                               => dispatch({ type: 'CLEAR' }), []);
 
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQty, removeItem, totalItems }}>
+    <CartContext.Provider value={{ cart: state.cart, addToCart, updateQty, removeItem, clearCart, totalItems }}>
       {children}
     </CartContext.Provider>
   );
 }
 
-export function useCart() {
+export function useCart(): CartContextType {
   const ctx = useContext(CartContext);
-  if (!ctx) {
-    throw new Error('useCart must be used within CartProvider');
-  }
-
+  if (!ctx) throw new Error('useCart must be used within <CartProvider>');
   return ctx;
 }
