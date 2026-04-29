@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
+import { Analytics } from "@vercel/analytics/react";
 import Index from "./pages/Index.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
 import CartPage from "./pages/CartPage.tsx";
@@ -24,6 +25,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </CartProvider>
+      <Analytics />
     </TooltipProvider>
   </QueryClientProvider>
 );
