@@ -10,7 +10,6 @@ import imgPoMark from '@/assets/po-mark.jpeg';
 import imgBoxHead from '@/assets/box-head.jpeg';
 import imgSpiderman from '@/assets/spiderman-tee.jpeg';
 import imgHoodedHero from '@/assets/hooded-hero.png';
-import imgParshuram from '@/assets/parshuram-tee.jpeg';
 import imgEnjoyMadness from '@/assets/enjoy-the-madness.jpeg';
 import imgEnjoyMadnessV2 from '@/assets/enjoy-the-madness-v2.jpeg';
 import imgBlankTee from '@/assets/blank-tee.jpeg';
@@ -67,7 +66,6 @@ const SIZES: Record<string, SizeAvailability> = {
   'Box Head': { S: true, M: true, L: true, XL: true },
   'Spider-Man': { S: true, M: false, L: false, XL: false },
   'Hooded Hero': { S: true, M: true, L: true, XL: true },
-  Parshuram: { S: true, M: true, L: true, XL: true },
   'Wow Cats': { S: false, M: true, L: false, XL: true },
 };
 
@@ -273,23 +271,6 @@ export const PRODUCTS: Product[] = [
     stockNote: 'New Launch',
     description:
       'White tee with a bold Parshuram warrior illustration, axe artwork, and vintage poster typography. A clean front keeps the focus on the detailed back design.',
-    fabric: '100% Premium Cotton',
-    fit: 'Regular Fit',
-  },
-  {
-    id: 'prod_13',
-    name: 'Parshuram',
-    slug: 'parshuram',
-    price: 409,
-    originalPrice: 699,
-    category: 'Graphic',
-    color: 'White',
-    sizes: SIZES.Parshuram,
-    images: [imgParshuram],
-    tag: 'New Drop',
-    stockNote: '',
-    description:
-      'White graphic tee with a clean front and a bold Parshuram illustration on the back, finished with vintage-style typography.',
     fabric: '100% Premium Cotton',
     fit: 'Regular Fit',
   },
