@@ -64,7 +64,7 @@ function TrustBar() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ['All', 'Basic', 'Graphic'] as const;
+const CATEGORIES = ['All', 'Graphic'] as const;
 type Filter = 'All' | Category;
 
 export default function Index() {

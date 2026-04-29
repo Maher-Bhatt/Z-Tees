@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useReducer, type ReactNode } from 'react';
-import { isSizeAvailable, type Product } from '@/data/products';
+import { getProductById, isSizeAvailable, type Product } from '@/data/products';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -87,7 +87,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as CartItem[];
-        if (Array.isArray(parsed)) dispatch({ type: 'HYDRATE', cart: parsed });
+        if (Array.isArray(parsed)) {
+          const validCart = parsed
+            .map(item => {
+              const currentProduct = getProductById(item.product?.id ?? '');
+              if (!currentProduct || !isSizeAvailable(currentProduct, item.size)) return null;
+              return {
+                ...item,
+                product: currentProduct,
+                qty: Number.isFinite(item.qty) && item.qty > 0 ? item.qty : 1,
+              };
+            })
+            .filter((item): item is CartItem => item !== null);
+          dispatch({ type: 'HYDRATE', cart: validCart });
+        }
       }
     } catch {
       // Corrupt storage — start fresh
