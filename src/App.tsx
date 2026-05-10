@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Index from "./pages/Index.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
 import CartPage from "./pages/CartPage.tsx";
@@ -26,6 +27,7 @@ const App = () => (
         </BrowserRouter>
       </CartProvider>
       <Analytics />
+      <SpeedInsights />
     </TooltipProvider>
   </QueryClientProvider>
 );
